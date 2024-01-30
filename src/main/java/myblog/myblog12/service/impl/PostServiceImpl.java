@@ -5,9 +5,13 @@ import myblog.myblog12.exception.ResourseNotFoundException;
 import myblog.myblog12.payload.PostDto;
 import myblog.myblog12.repository.PostRepository;
 import myblog.myblog12.service.PostService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PostServiceImpl implements PostService {
@@ -31,6 +35,15 @@ public class PostServiceImpl implements PostService {
                 ()->new ResourseNotFoundException("data is not found with id "+id)
         );
         PostDto dto = mapTODto(post);
+        return dto;
+    }
+
+    @Override
+    public List<PostDto> getAllRegistration(int pageNo, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        Page<Post> pagePost = repository.findAll(pageable);
+        List<Post> posts = pagePost.getContent();
+        List<PostDto> dto = posts.stream().map(post -> mapTODto(post)).collect(Collectors.toList());
         return dto;
     }
 

@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 //      http://localhost:8080/rest/api
@@ -29,5 +30,14 @@ public class PostController {
     public ResponseEntity<PostDto> getRegistration(@RequestParam long id){
         PostDto getid = service.getRegistration(id);
         return new ResponseEntity<>(getid,HttpStatus.OK);
+    }
+    //      Http://localhost:8080/rest/api/getAll?pageNo=0&pageSize=3
+    @GetMapping("/getAll")
+    public List<PostDto> getAllPost(
+            @RequestParam(name = "pageNo",required = false,defaultValue = "0")int pageNo,
+            @RequestParam(name = "pageSize",required = false,defaultValue = "3") int pageSize
+    ){
+        List<PostDto>dto = service.getAllRegistration(pageNo,pageSize);
+        return dto;
     }
 }

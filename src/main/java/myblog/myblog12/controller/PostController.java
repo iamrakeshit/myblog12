@@ -31,13 +31,14 @@ public class PostController {
         PostDto getid = service.getRegistration(id);
         return new ResponseEntity<>(getid,HttpStatus.OK);
     }
-    //      Http://localhost:8080/rest/api/getAll?pageNo=0&pageSize=3
+    //      Http://localhost:8080/rest/api/getAll?pageNo=0&pageSize=3&shortBy=name
     @GetMapping("/getAll")
     public List<PostDto> getAllPost(
             @RequestParam(name = "pageNo",required = false,defaultValue = "0")int pageNo,
-            @RequestParam(name = "pageSize",required = false,defaultValue = "3") int pageSize
+            @RequestParam(name = "pageSize",required = false,defaultValue = "3") int pageSize,
+            @RequestParam(name = "shortBy",required = false,defaultValue = "id") String shortBy
     ){
-        List<PostDto>dto = service.getAllRegistration(pageNo,pageSize);
+        List<PostDto>dto = service.getAllRegistration(pageNo,pageSize,shortBy);
         return dto;
     }
 }

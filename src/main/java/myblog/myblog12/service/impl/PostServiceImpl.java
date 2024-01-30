@@ -1,10 +1,13 @@
 package myblog.myblog12.service.impl;
 
 import myblog.myblog12.entity.Post;
+import myblog.myblog12.exception.ResourseNotFoundException;
 import myblog.myblog12.payload.PostDto;
 import myblog.myblog12.repository.PostRepository;
 import myblog.myblog12.service.PostService;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class PostServiceImpl implements PostService {
@@ -21,11 +24,21 @@ public class PostServiceImpl implements PostService {
         PostDto dto = mapTODto(spost);
         return dto;
     }
+
+    @Override
+    public PostDto getRegistration(long id) {
+        Post post = repository.findById(id).orElseThrow(
+                ()->new ResourseNotFoundException("data is not found with id "+id)
+        );
+        PostDto dto = mapTODto(post);
+        return dto;
+    }
+
     Post mapToEntity(PostDto postDto){
        Post post = new Post();
        post.setName(postDto.getName());
-       post.setEmail(post.getEmail());
-       post.setMobile(post.getMobile());
+       post.setEmail(postDto.getEmail());
+       post.setMobile(postDto.getMobile());
        return post;
     }
     PostDto mapTODto(Post post){

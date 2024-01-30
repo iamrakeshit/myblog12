@@ -40,8 +40,10 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostDto> getAllRegistration(int pageNo, int pageSize, String shortBy) {
-        Pageable pageable = PageRequest.of(pageNo,pageSize, Sort.by(shortBy));
+    public List<PostDto>
+    getAllRegistration(int pageNo, int pageSize, String shortBy, String sortDir) {
+       Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name())?Sort.by(shortBy).ascending() : Sort.by(shortBy).descending();
+        Pageable pageable = PageRequest.of(pageNo,pageSize, sort);
         Page<Post> pagePost = repository.findAll(pageable);
         List<Post> posts = pagePost.getContent();
         List<PostDto> dto = posts.stream().map(post -> mapTODto(post)).collect(Collectors.toList());
